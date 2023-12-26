@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'com.youngseo3.infrean.communityapp'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.youngseo3.infrean.communityapp"
