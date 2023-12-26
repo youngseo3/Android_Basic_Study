@@ -7,13 +7,16 @@ android {
     namespace 'com.youngseo3.infrean.communityapp'
     compileSdk 34
 
+    buildFeatures {
+        dataBinding true
+    }
+
     defaultConfig {
         applicationId "com.youngseo3.infrean.communityapp"
         minSdk 24
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
