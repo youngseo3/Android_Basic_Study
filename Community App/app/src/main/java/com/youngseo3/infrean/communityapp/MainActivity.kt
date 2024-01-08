@@ -35,6 +35,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initBottomNavigationView() {
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_container, HomeFragment())
+            .commit()
+
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.fragment_home -> {
