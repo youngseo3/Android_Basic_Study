@@ -16,19 +16,26 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.youngseo3.infrean.communityapp.R
+import com.youngseo3.infrean.communityapp.utils.FBAuth
+import com.youngseo3.infrean.communityapp.utils.FBRef
 
 class ContentListActivity : AppCompatActivity() {
 
     lateinit var myRef: DatabaseReference
+    lateinit var rvAdapter: ContentRVAdapter // 어댑터
+
+    val bookmarkIDdList = mutableListOf<String>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_content_list)
 
         val items = ArrayList<ContentModel>()
+        val itemKeyList = ArrayList<String>()
 
         val rv: RecyclerView = findViewById(R.id.content_list_rv)
-        val rvAdapter = ContentRVAdapter(baseContext, items)
+        rvAdapter = ContentRVAdapter(baseContext, items, itemKeyList, bookmarkIDdList)
 
 //        items.add(ContentModel("title4", "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FblYPPY%2Fbtq66v0S4wu%2FRmuhpkXUO4FOcrlOmVG4G1%2Fimg.png", "https://philosopher-chan.tistory.com/1235"))
 //        items.add(ContentModel("title5", "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FznKK4%2Fbtq665AUWem%2FRUawPn5Wwb4cQ8BetEwN40%2Fimg.png", "https://philosopher-chan.tistory.com/1236"))
@@ -50,7 +57,6 @@ class ContentListActivity : AppCompatActivity() {
 
         } else if (category == "category2") {
             myRef = database.getReference("contents2")
-
         }
 
         val postListener = object : ValueEventListener {
@@ -60,7 +66,7 @@ class ContentListActivity : AppCompatActivity() {
 //                    Log.d("ContentListActivity", dataModel.toString())
                     val item = dataModel.getValue(ContentModel::class.java)
                     items.add(item!!)
-
+                    itemKeyList.add(dataModel.key.toString())
                 }
 //                Log.d("ContentListActivity", items.toString())
                 rvAdapter.notifyDataSetChanged() // 어댑터 동기화하라는 의미임 추가안하면 비동기로 처리되서 이미지가 안나옴
@@ -72,7 +78,7 @@ class ContentListActivity : AppCompatActivity() {
             }
         }
         myRef.addValueEventListener(postListener)
-
+        getBookmarkData()
         rv.adapter = rvAdapter // 어댑터 연결
         rv.layoutManager = GridLayoutManager(this, 2) // GridLayout 설정
 
@@ -85,7 +91,26 @@ class ContentListActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+    }
 
+    private fun getBookmarkData() {
 
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                bookmarkIDdList.clear() // 호출하지 않으면 리스트에 중복해서 추가됨
+                for(dataModel in dataSnapshot.children) {
+                    bookmarkIDdList.add(dataModel.key.toString())
+                }
+                Log.d("getBookmarkData : ", bookmarkIDdList.toString())
+                rvAdapter.notifyDataSetChanged() // 어댑터 동기화
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Getting Post failed, log a message
+                Log.w("ContentListActivity", "loadPost:onCancelled", databaseError.toException())
+            }
+        }
+        FBRef.bookmarkRef.child(FBAuth.getUid()).addValueEventListener(postListener)
     }
 }
