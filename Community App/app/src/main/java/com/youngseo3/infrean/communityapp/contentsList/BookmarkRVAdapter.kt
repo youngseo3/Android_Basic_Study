@@ -1,7 +1,8 @@
 package com.youngseo3.infrean.communityapp.contentsList
 
 import android.content.Context
-import android.text.Layout
+import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,38 +10,39 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.youngseo3.infrean.communityapp.R
 import com.youngseo3.infrean.communityapp.utils.FBAuth
 import com.youngseo3.infrean.communityapp.utils.FBRef
 
-class ContentRVAdapter(val context: Context,
+class BookmarkRVAdapter(val context: Context,
                        val items: ArrayList<ContentModel>,
                        val keyList: ArrayList<String>,
                        val bookmarkIdList: MutableList<String>)
-    : RecyclerView.Adapter<ContentRVAdapter.Viewholder>() {
+    : RecyclerView.Adapter<BookmarkRVAdapter.Viewholder>() {
 
     interface ItemClick {
         fun onClick(view: View, position: Int)
     }
     var itemClick: ItemClick? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContentRVAdapter.Viewholder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookmarkRVAdapter.Viewholder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.item_content_list, parent, false)
 
-        Log.d("ContentRVAdapter", bookmarkIdList.toString())
+        Log.d("BookmarkRVAdapter", bookmarkIdList.toString())
         return Viewholder(v)
     }
 
-    override fun onBindViewHolder(holder: ContentRVAdapter.Viewholder, position: Int) {
-
-//        if(itemClick != null) { // onBindViewHolder 부분에 작성하면 스크롤시 계속 클릭리스너가 호출됨
-//            Log.d("BIND", "아이템클릭리스너+$position+")
-//            holder.itemView.setOnClickListener { v ->
-//                itemClick?.onClick(v, position)
-//            }
-//        }
+    override fun onBindViewHolder(holder: BookmarkRVAdapter.Viewholder, position: Int) {
         holder.bindItems(items[position], keyList[position])
     }
 
@@ -63,28 +65,6 @@ class ContentRVAdapter(val context: Context,
                     itemClick?.onClick(it, adapterPosition)
                     Log.d("BIND", "아이템클릭리스너, $adapterPosition")
                 }
-            }
-
-            bookmarkArea.setOnClickListener { // bookmark 클릭 이벤트
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    val currentKey = keyList[adapterPosition]
-                    Toast.makeText(context, currentKey, Toast.LENGTH_LONG).show()
-
-                    if(bookmarkIdList.contains(currentKey)) {
-                        // 북마크가 있을 때
-                        FBRef.bookmarkRef
-                            .child(FBAuth.getUid())
-                            .child(currentKey)
-                            .removeValue()
-                    } else {
-                        // 북마크가 없을 때
-                        FBRef.bookmarkRef
-                            .child(FBAuth.getUid())
-                            .child(currentKey)
-                            .setValue(BookmarkModel(true))
-                    }
-                }
-
             }
 
         }

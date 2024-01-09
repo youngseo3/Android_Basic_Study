@@ -26,7 +26,6 @@ class ContentListActivity : AppCompatActivity() {
 
     val bookmarkIDdList = mutableListOf<String>()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_content_list)
@@ -78,9 +77,11 @@ class ContentListActivity : AppCompatActivity() {
             }
         }
         myRef.addValueEventListener(postListener)
-        getBookmarkData()
+
         rv.adapter = rvAdapter // 어댑터 연결
         rv.layoutManager = GridLayoutManager(this, 2) // GridLayout 설정
+
+        getBookmarkData()
 
         rvAdapter.itemClick = object : ContentRVAdapter.ItemClick { // 아이템 클릭 이벤트 처리
             override fun onClick(view: View, position: Int) {
