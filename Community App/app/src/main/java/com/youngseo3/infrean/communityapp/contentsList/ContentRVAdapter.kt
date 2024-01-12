@@ -82,7 +82,7 @@ class ContentRVAdapter(val context: Context,
                             .child(FBAuth.getUid())
                             .child(currentKey)
                             .setValue(BookmarkModel(true))
-                    }
+                      }
                 }
 
             }
