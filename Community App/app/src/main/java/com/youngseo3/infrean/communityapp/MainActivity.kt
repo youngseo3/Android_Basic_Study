@@ -11,6 +11,7 @@ import com.google.firebase.ktx.Firebase
 import com.youngseo3.infrean.communityapp.auth.IntroActivity
 import com.youngseo3.infrean.communityapp.databinding.ActivityMainBinding
 import com.youngseo3.infrean.communityapp.fragments.*
+import com.youngseo3.infrean.communityapp.setting.SettingActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,14 +23,10 @@ class MainActivity : AppCompatActivity() {
         auth = Firebase.auth
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-//        binding.logoutBtn.setOnClickListener {
-//
-//            auth.signOut()
-//
-//            val intent = Intent(this, IntroActivity::class.java)
-//            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//            startActivity(intent)
-//        }
+        binding.settingBtn.setOnClickListener {
+            val intent = Intent(this, SettingActivity::class.java)
+            startActivity(intent)
+        }
 
         initBottomNavigationView()
     }

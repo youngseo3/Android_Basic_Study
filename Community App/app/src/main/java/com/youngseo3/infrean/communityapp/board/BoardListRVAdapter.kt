@@ -1,5 +1,6 @@
 package com.youngseo3.infrean.communityapp.board
 
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.youngseo3.infrean.communityapp.R
+import com.youngseo3.infrean.communityapp.utils.FBAuth
 
 class BoardListRVAdapter(val boardList: MutableList<BoardModel>): RecyclerView.Adapter<BoardListRVAdapter.ViewHolder>() {
 
@@ -27,7 +29,7 @@ class BoardListRVAdapter(val boardList: MutableList<BoardModel>): RecyclerView.A
     }
 
     override fun onBindViewHolder(holder: BoardListRVAdapter.ViewHolder, position: Int) {
-        holder.bindItems(boardList[position])
+        holder.bindItems(boardList[position], position)
     }
 
     override fun getItemCount(): Int {
@@ -45,11 +47,13 @@ class BoardListRVAdapter(val boardList: MutableList<BoardModel>): RecyclerView.A
                 if (adapterPosition != RecyclerView.NO_POSITION) { // adapterPosition이 유효한 경우에만 작업을 수행
                     itemClickListener?.onItemClick(adapterPosition)
                     Log.d("BIND", "아이템클릭리스너, $adapterPosition")
-
                 }
             }
         }
-        fun bindItems(item: BoardModel) {
+        fun bindItems(item: BoardModel, position: Int) {
+            if(boardList[position].uid.equals(FBAuth.getUid())) {
+                itemView.setBackgroundColor(Color.parseColor("#ffa500"))
+            }
             title.text = item.title
             content.text = item.content
             time.text = item.time
