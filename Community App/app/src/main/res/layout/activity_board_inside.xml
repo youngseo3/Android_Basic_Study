@@ -1,76 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".board.BoardInsideActivity"
-        android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".board.BoardInsideActivity">
 
-        <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="60dp">
-            <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_height="match_parent">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/titleArea"
+                            android:text="title"
+                            android:textColor="@color/black"
+                            android:layout_marginHorizontal="50dp"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"/>
+
+                        <ImageView
+                            android:id="@+id/boardSettingIcon"
+                            android:layout_width="20dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/main_menu"
+                            android:visibility="invisible"
+                            android:layout_margin="10dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:background="@color/black"
+                    android:layout_height="0.5dp">
+
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/titleArea"
-                    android:text="title"
-                    android:textColor="@color/black"
-                    android:layout_marginHorizontal="50dp"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
+                    android:id="@+id/timeArea"
+                    android:text="time"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"/>
+                    android:gravity="right"
+                    android:layout_margin="10dp"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/textArea"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_margin="20dp"
+                    android:textColor="@color/black"
+                    android:text="여기는 내용 영역"
+                    android:background="@drawable/background_radius"
+                    android:padding="10dp"/>
+
 
                 <ImageView
-                    android:id="@+id/boardSettingIcon"
-                    android:layout_width="20dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/main_menu"
-                    android:visibility="invisible"
-                    android:layout_margin="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:id="@+id/getImageArea"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"/>
 
-
-        </LinearLayout>
+                <Button
+                    android:id="@+id/button_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="댓글 달기"
+                    android:background="@drawable/background_radius_yellow"/>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+        <!--            <androidx.coordinatorlayout.widget.CoordinatorLayout-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content">-->
+        <!-- Persistent Bottom Sheet -->
+        <!-- behavior 속성을 여기서 적용합니다 -->
 
         <LinearLayout
+            android:id="@+id/persistent_bottom_sheet"
             android:layout_width="match_parent"
-            android:background="@color/black"
-            android:layout_height="0.5dp">
+            android:layout_height="360dp"
+            android:background="#ebebeb"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:behavior_hideable="true"
+            app:behavior_peekHeight="0dp"
+            app:behavior_draggable="true"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+            <!-- persistent bottom sheet의 Content -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="댓글창"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:textColor="@color/black"
+                android:gravity="center"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/commentsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+            <EditText
+                android:id="@+id/commentEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="댓글을 입력하세요" />
+
+            <Button
+                android:id="@+id/submitCommentButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="댓글 작성" />
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/timeArea"
-            android:text="time"
-            android:layout_width="match_parent"
-            android:gravity="right"
-            android:layout_margin="10dp"
-            android:layout_height="wrap_content"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-        <TextView
-            android:id="@+id/textArea"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_margin="20dp"
-            android:textColor="@color/black"
-            android:text="여기는 내용 영역"
-            android:background="@drawable/background_radius"
-            android:padding="10dp"/>
-
-
-        <ImageView
-            android:id="@+id/getImageArea"
-            android:layout_marginHorizontal="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"/>
-
-    </LinearLayout>
 </layout>
