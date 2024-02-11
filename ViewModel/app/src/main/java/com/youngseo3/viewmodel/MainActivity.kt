@@ -31,13 +31,16 @@ class MainActivity : AppCompatActivity() {
     //    private var countValue = 0
     private lateinit var binding: ActivityMainBinding
     lateinit var viewModel: MainViewModel
+    lateinit var viewModelFactory: MainViewModelFactory
     override fun onCreate(savedInstanceState: Bundle?) {
         // 화면을 전환한다. 그니까 세로상태에서 가로상태로 놓이게 되면 저장하고 있던(countValue)텍스트값이 0으로 초기화됨
         // 따라서 ViewModel을 사용해서 이를 해결하고자 함. 즉 ViewModel을 사용하면 화면 전환을 해도 데이터가 초기화되지 않음
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
+        viewModelFactory = MainViewModelFactory(100)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
         Log.d("MainActivity", "onCreate")
 
