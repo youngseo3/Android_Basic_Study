@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.youngseo3.viewmodel.databinding.ActivityMainBinding
 
 // ViewModel
 
@@ -26,43 +28,43 @@ import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
 
-//    private var countValue = 0
+    //    private var countValue = 0
+    private lateinit var binding: ActivityMainBinding
     lateinit var viewModel: MainViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         // 화면을 전환한다. 그니까 세로상태에서 가로상태로 놓이게 되면 저장하고 있던(countValue)텍스트값이 0으로 초기화됨
         // 따라서 ViewModel을 사용해서 이를 해결하고자 함. 즉 ViewModel을 사용하면 화면 전환을 해도 데이터가 초기화되지 않음
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         Log.d("MainActivity", "onCreate")
 
-        val plusBtn : Button = findViewById(R.id.plus)
-        val minusBtn : Button = findViewById(R.id.minus)
+        binding.result.text = viewModel.countValue.toString()
 
-        val resultArea : TextView = findViewById(R.id.result)
-
-        resultArea.text= viewModel.countValue.toString()
-
-        plusBtn.setOnClickListener{
+        binding.plus.setOnClickListener{
             viewModel.plus()
-            resultArea.text= viewModel.countValue.toString()
+            binding.result.text = viewModel.getCount().toString()
             // ViewModel 사용 X
 //            countValue++
 //            resultArea.text= countValue.toString()
         }
 
-        minusBtn.setOnClickListener{
+        binding.minus.setOnClickListener{
             viewModel.minus()
-            resultArea.text= viewModel.countValue.toString()
+            binding.result.text = viewModel.getCount().toString()
             // ViewModel 사용 X
 //            countValue--
 //            resultArea.text= countValue.toString()
         }
 
-
+        binding.showFragment.setOnClickListener{
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.frameArea, TestFragment())
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     override fun onStart() {
